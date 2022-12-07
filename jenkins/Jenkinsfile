@@ -1,0 +1,23 @@
+pipeline{
+    agent any
+    stages{
+        stage("Clean"){
+            steps{
+                deleteDir()
+            }
+        }
+        stage("Pull repository"){
+            steps{
+                sh "git clone https://github.com/czechp/jenkins-spring-test.git"
+            }
+        }
+        stage("Clean install"){
+            steps{
+                    dir("jenkins-spring-test"){
+                        sh "mvn clean install"
+                    }
+            }
+
+        }
+    }
+}
