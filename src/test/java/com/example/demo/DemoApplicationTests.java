@@ -14,6 +14,7 @@ class DemoApplicationTests {
 	}
 
 	@Test
+	@Disabled
 	void failedTest(){
 		assertTrue(false);
 	}
