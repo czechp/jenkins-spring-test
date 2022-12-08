@@ -23,7 +23,6 @@ pipeline{
                 dir("jenkins-spring-test"){
                     sh "mvn test"
                 }
-                echo "Script finished"
             }
         }
     }
