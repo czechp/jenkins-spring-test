@@ -1,28 +1,20 @@
 pipeline{
     agent any
     parameters{
-        booleanParam(defaultValue: false, description: "Build test branch", name: "myBoolean")
+        choice(choices:["withTest", "withoutTest"], description: "Use tests?", name: executeTest)
     }
     stages{
-        stage("Clear"){
+        stage("Clear directory"){
             steps{
                 deleteDir()
             }
         }
-        stage("Clone repo"){
+        stage("Clone repository"){
             steps{
                 sh "git clone https://github.com/czechp/jenkins-spring-test.git"
             }
         }
-        stage("Test branch"){
-            when{expression{params.myBoolean == true}}
-            steps{
-                dir("jenkins-spring-test"){
-                    sh "git checkout TestBranch"
-                }
-            }
-        }
-        stage("Build"){
+        stage("Build project"){
             steps{
                 dir("jenkins-spring-test"){
                     sh "mvn clean install"
@@ -30,11 +22,11 @@ pipeline{
             }
         }
         stage("Test"){
+        when{expression{params.executeTest=="withTest"}}
             steps{
                 dir("jenkins-spring-test"){
                     sh "mvn test"
                 }
-                echo "Script finished"
             }
         }
     }
