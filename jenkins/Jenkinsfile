@@ -1,5 +1,8 @@
 pipeline{
     agent any
+    parameters{
+        booleanParam(defaultValue: false, description: "Build test branch", name: "myBoolean")
+    }
     stages{
         stage("Clear"){
             steps{
@@ -9,6 +12,14 @@ pipeline{
         stage("Clone repo"){
             steps{
                 sh "git clone https://github.com/czechp/jenkins-spring-test.git"
+            }
+        }
+        stage("Test branch"){
+            when{expression{params.myBoolean == true}}
+            steps{
+                dir("jenkins-spring-test"){
+                    sh "git checkout TestBranch"
+                }
             }
         }
         stage("Build"){
